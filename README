@@ -2,38 +2,55 @@ railspdf
 
 Adds pdf-writer support to Rails
 
-
 Usage
 -----
 
-To begin rendering PDFs, simply create a view with a .rpdf extension and paste in the code:
+To begin rendering PDFs, simply create a view with a .pdf.writer extension and paste in the code:
 
   pdf.select_font "Times-Roman"
   pdf.text "Hello, World", :font_size => 72, :justification => :center
 
-If you want the text to be dynamic, simply replace "Hello World" with an instance variable. It works like a charm, although I had to rearrange the code a bit to make it work. (See the sample controller code at the bottom.)
-
-I've not yet tested any of this; I was just too excited once it started working. Note: to get plugins to work properly, you MUST restart the server after installing it.
-
-  **Important** If you are using a layout, you must disable it for the view!!! 
-
-The default filename for the pdf is "Default.pdf" I'll probably change that later to reflect the view name, but for now it works pretty good. To override it, set an instance variable in your controller named "@rails_pdf_name" The rendered pdf will take this filename.
+**Important** If you are using a layout, you must disable it for the view!!! 
 
 Please let me know if you have any questions.
 
+Controller Extensions
+---------------------
 
+	A rails_pdf method is mixed in which allows you to easily set
+	various configuration options (previous the settings were handled
+	with instance variables).  The options are:
+
+	  :disposition -- :inline or :attachment
+	  :filename    -- filename (for use with attachment disposition)
+	  :writer      -- hash of options (sent to PDF::Writer on initialization)
+
+	The defaults are as follows:
+	  :disposition => :inline
+	  :filename    => nil,
+	  :writer      => { :paper => 'LETTER', :orientation => :portrait }
+	
 Sample Controller
 -----------------
 
   class PagesController < ApplicationController
-    def getpdf
-    	@rails_pdf_name = "Hello.pdf"
+    def some_action
+			rails_pdf :disposition => :attachment, 
+			  :filename => 'Hello.pdf'
+			
     	@content = "This is dynamic content!!!"
     end
+
+		# Example of using writer configuration options
+		def	another_action
+		  rails_pdf :writer => {
+		    :orientation => :landscape
+		  }
+		end
   end
 
 
-Sample View
+Sample View (some_action.pdf.writer)
 -----------
 
   pdf.select_font "Times-Roman"
@@ -47,14 +64,16 @@ Original RubyForge project (outdated):
   http://rubyforge.org/projects/railspdfplugin/
 
 GitHub fork:
-  http://github.com/pelargir/railspdf/
+  http://github.com/scharfie/railspdf/
 
 Clone URL:
-  git://github.com/pelargir/railspdf.git
+  git://github.com/scharfie/railspdf.git
 
 
 Credit
 ------
-
+	
   * Created by Tom Willett
   * Forked and updated by Matthew Bass <pelargir@gmail.com>
+  * Forked again and updated by Chris Scharf <scharfie@gmail.com>
+	* Thanks to thorny-sun for the prawnto plugin
