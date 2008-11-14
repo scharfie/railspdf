@@ -1,5 +1,8 @@
 * Re-tooled to be more like the prawnto plugin [Chris Scharf]
   - now uses .pdf.writer for template name
+  - rails_pdf controller method allows for setting various pdf options
+  - helpers can now be used in the templates directly
+    (i.e. link_to(...) instead of @view.link_to(...))
 * Fixed case where matching view helper might not be available. [Matthew Bass]
 * Now compatible with Rails 2.1.0 [Matthew Bass]
 * Forked project on GitHub [Matthew Bass]
